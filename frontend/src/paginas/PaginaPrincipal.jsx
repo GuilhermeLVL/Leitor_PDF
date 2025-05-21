@@ -9,16 +9,39 @@ function PaginaPrincipal() {
   const [arquivoPDF, setArquivoPDF] = useState(null);
   // Novo estado para armazenar o texto extraído do PDF
   const [textoExtraido, setTextoExtraido] = useState('');
+  // Novo estado para indicar se a extração está em andamento
+  const [carregandoTexto, setCarregandoTexto] = useState(false);
 
-  // Função para simular a extração de texto do PDF (placeholder)
+  // Função para extrair texto do PDF enviando para o backend
   const extrairTextoDoPDF = async (arquivo) => {
-    // TODO: Implementar a lógica real de extração de texto (usando pdfjs-dist diretamente ou enviando para o backend)
-    // Por enquanto, apenas um placeholder
-    console.log('Simulando extração de texto...', arquivo.name);
-    // Simula um atraso e um texto de exemplo
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const textoSimulado = `Este é um texto de exemplo extraído do arquivo ${arquivo.name}.\n\nAqui virá o texto real do PDF após a implementação da lógica de extração.`;
-    setTextoExtraido(textoSimulado);
+    if (!arquivo) return;
+
+    setCarregandoTexto(true); // Define carregando como true ao iniciar
+    setTextoExtraido(''); // Limpa qualquer texto anterior
+
+    const formData = new FormData();
+    formData.append('arquivo_pdf', arquivo);
+
+    try {
+      const resposta = await fetch('http://localhost:8000/extrair-texto/', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!resposta.ok) {
+        // Se a resposta não for bem-sucedida (status 4xx ou 5xx)
+        const erro = await resposta.json();
+        throw new Error(erro.erro || 'Erro ao extrair texto do PDF');
+      }
+
+      const dados = await resposta.json();
+      setTextoExtraido(dados.texto_extraido); // Atualiza o estado com o texto extraído
+    } catch (erro) {
+      console.error('Erro ao extrair texto:', erro);
+      setTextoExtraido(`Erro ao extrair texto: ${erro.message}`); // Exibe mensagem de erro
+    } finally {
+      setCarregandoTexto(false); // Define carregando como false ao finalizar (sucesso ou erro)
+    }
   };
 
   // Função chamada quando um arquivo PDF é selecionado no componente UploadPDF
@@ -45,7 +68,11 @@ function PaginaPrincipal() {
           <VisualizadorPDF arquivo={arquivoPDF} />
 
           {/* Renderiza o componente para exibir o texto extraído */}
-          <ExibidorTexto texto={textoExtraido} />
+          {carregandoTexto ? (
+            <p>Extraindo texto...</p>
+          ) : (
+            <ExibidorTexto texto={textoExtraido} />
+          )}
 
           {/* Botões para funcionalidades futuras (resumo, TTS) */}
           <div>
