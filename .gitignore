@@ -1,0 +1,63 @@
+# .gitignore
+
+# Node (frontend)
+frontend/node_modules/
+frontend/.env
+frontend/.next/
+frontend/.turbo/
+frontend/dist/
+frontend/build/
+
+# React specific
+frontend/.DS_Store
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Python (backend)
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/.env
+backend/.venv/
+backend/env/
+backend/venv/
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.DS_Store
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Python virtual environments (root-level)
+env/
+venv/
+.venv/
+
+# Logs
+*.log
+
+# System files
+Thumbs.db
+
+# Ignorar diretórios de dependências
+node_modules/
+backend/venv/
+
+# Ignorar arquivos de build
+frontend/build/
+
+# Ignorar arquivos de ambiente
+.env
+
+# Ignorar cache e outros arquivos gerados
+__pycache__/
+*.pyc
+
+# Ignorar arquivos de sistema e editores comuns
+.DS_Store
+Thumbs.db
+.vscode/
