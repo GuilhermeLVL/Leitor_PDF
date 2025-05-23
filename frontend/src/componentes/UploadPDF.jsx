@@ -24,17 +24,27 @@ function UploadPDF({ onArquivoSelecionado }) {
     }
   };
 
+  // Só renderiza o uploader se nenhum arquivo foi selecionado
+  if (arquivoPDF) {
+    return <p>Arquivo carregado: {arquivoPDF.name}</p>;
+  }
+
   return (
     <div>
-      <h2>Carregar Arquivo PDF</h2>
+      {/* Usar um label estilizado para o input de arquivo */}
+      <label htmlFor="pdf-upload" className="upload-pdf-label">
+        Selecionar Arquivo PDF
+      </label>
       <input
+        id="pdf-upload"
         type="file"
         accept=".pdf"
         onChange={handleFileChange}
       />
-      {arquivoPDF && (
+      {/* A mensagem de arquivo selecionado será exibida pelo return acima */}
+      {/* {arquivoPDF && (
         <p>Arquivo selecionado: {arquivoPDF.name}</p>
-      )}
+      )} */}
     </div>
   );
 }

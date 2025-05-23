@@ -7,9 +7,196 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6; /* Melhorar legibilidade */
+  color: #333; /* Cor de texto padrão */
+  background-color: #f4f4f4; /* Fundo suave */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Container principal da aplicação */
+.app-container {
+    max-width: 1200px; /* Largura máxima do conteúdo */
+    margin: 20px auto; /* Centralizar e adicionar margem */
+    padding: 0 20px; /* Espaçamento interno */
+    display: flex; /* Usar flexbox para o layout principal */
+    flex-direction: column; /* Conteúdo empilhado por padrão */
+    gap: 20px; /* Espaço entre header e main */
+}
+
+/* Estilos para o cabeçalho */
+.app-header {
+    display: flex;
+    flex-direction: column; /* Empilhar título e upload em telas pequenas */
+    align-items: center; /* Centralizar itens */
+    gap: 15px; /* Aumentar espaço entre itens do header */
+    padding-bottom: 20px; /* Espaçamento abaixo do header */
+    border-bottom: 1px solid #ddd; /* Separador visual */
+    margin-bottom: 20px; /* Espaço após o header */
+}
+
+@media (min-width: 768px) {
+    .app-header {
+        flex-direction: row; /* Alinhar lado a lado em telas maiores */
+        justify-content: space-between; /* Espalhar itens */
+        align-items: center;
+    }
+
+    .app-header h1 {
+        margin: 0; /* Remover margem inferior do título no layout row */
+    }
+}
+
+h1 {
+    color: #0056b3; /* Tom de azul para o título */
+    margin: 0;
+    font-size: 2em; /* Aumentar tamanho do título */
+}
+
+/* Estilos para o conteúdo principal (visualizador + texto) */
+.app-main-content {
+    display: flex;
+    flex-direction: column; /* Empilhar visualizador e texto em telas pequenas */
+    gap: 20px; /* Espaço entre as seções */
+}
+
+@media (min-width: 768px) {
+    .app-main-content {
+        flex-direction: row; /* Layout de duas colunas em telas maiores */
+        align-items: flex-start;
+        /* Ajustar a altura para ocupar o espaço restante */
+        flex-grow: 1; /* Permitir que ocupe o espaço disponível */
+    }
+}
+
+/* Estilo para o container do visualizador de PDF */
+.pdf-viewer-container {
+    flex: 1; /* Ocupar espaço disponível */
+    min-width: 300px; /* Largura mínima */
+    background-color: #fff; /* Fundo branco para o visualizador */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra um pouco mais pronunciada */
+    padding: 20px; /* Espaçamento interno */
+    overflow-y: auto; /* Adicionar scroll VERTICAL */
+    height: calc(100vh - 200px); /* Altura base, ajusta conforme necessário */
+    display: flex;
+    justify-content: center; /* Centralizar conteúdo horizontalmente */
+    align-items: flex-start; /* Alinhar conteúdo ao topo */
+    /* Adicionar estilo para o elemento canvas/div gerado pelo react-pdf */
+    & > div {
+        margin: 0 auto; /* Centralizar o visualizador */
+    }
+}
+
+/* Estilo para o container do texto extraído */
+.text-content-container {
+    flex: 1; /* Ocupar espaço disponível */
+    min-width: 300px; /* Largura mínima */
+    background-color: #fff; /* Fundo branco */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra um pouco mais pronunciada */
+    padding: 20px; /* Espaçamento interno */
+    overflow-y: auto; /* Adiciona scroll VERTICAL se o texto for grande */
+    height: calc(100vh - 200px); /* Altura base, ajusta conforme necessário */
+    display: flex;
+    flex-direction: column; /* Conteúdo do texto em coluna */
+}
+
+/* Estilos para o componente ExibidorTexto */
+.text-content-container h2 {
+    margin-top: 0;
+    color: #0056b3;
+    border-bottom: 1px solid #eee; /* Separador suave */
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.text-content-container p {
+    white-space: pre-wrap; /* Preservar quebras de linha do texto extraído */
+    word-wrap: break-word; /* Quebrar palavras longas */
+    font-size: 1.1rem; /* Tamanho de fonte um pouco maior */
+    line-height: 1.8; /* Altura de linha para melhor legibilidade */
+    color: #555; /* Cor de texto um pouco mais suave */
+    flex-grow: 1; /* Permitir que o parágrafo ocupe o espaço restante */
+}
+
+/* Estilos para os controles de paginação */
+.pagination-controls {
+    display: flex;
+    justify-content: center; /* Centralizar botões */
+    gap: 15px; /* Espaço entre botões */
+    margin-top: 20px;
+    padding-top: 15px; /* Espaçamento acima dos botões */
+    border-top: 1px solid #eee; /* Separador */
+}
+
+.pagination-controls button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px; /* Bordas levemente mais arredondadas */
+    background-color: #007bff; /* Azul primário */
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, opacity 0.3s ease; /* Adicionar transição para opacidade */
+}
+
+.pagination-controls button:disabled {
+    background-color: #cccccc; /* Cinza para desabilitado */
+    cursor: not-allowed;
+    opacity: 0.6; /* Reduzir opacidade quando desabilitado */
+}
+
+.pagination-controls button:not(:disabled):hover {
+    background-color: #0056b3; /* Azul mais escuro no hover */
+}
+
+/* Estilo para o componente UploadPDF - esconde o input padrão e estiliza um label */
+.upload-pdf-label {
+    display: inline-block;
+    background-color: #28a745; /* Verde para upload */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+}
+
+.upload-pdf-label:hover {
+    background-color: #218838; /* Verde mais escuro no hover */
+}
+
+.upload-pdf-label input[type="file"] {
+    display: none; /* Esconder o input padrão */
+}
+
+/* Estilo para o indicador de carregamento */
+.loading-indicator {
+    text-align: center;
+    font-size: 1.2em;
+    color: #555;
+    margin-top: 20px;
+}
+
+/* Estilo básico para um spinner (exemplo, pode ser substituído por uma biblioteca de spinner) */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #007bff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 } 
